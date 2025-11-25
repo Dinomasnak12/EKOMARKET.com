@@ -1,0 +1,1574 @@
+<!doctype html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="utf-8" />
+
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<title>Memory — Parejas (Mezcla Emoji+SVG) — Dorso 👻</title>
+
+<style>
+
+ :root{
+
+  --bg:#f0fbf7;
+
+  --panel:#ffffff;
+
+  --muted:#21323a;
+
+  --accent:#2a9d73;
+
+  --accent-2:#56c593;
+
+  --danger:#f05454;
+
+  --card-size:88px;
+
+  --back-emoji: '👻';
+
+ }
+
+ *{box-sizing:border-box}
+
+ body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg),#f6fff9);color:var(--muted);display:flex;justify-content:center;padding:20px}
+
+ .app{width:100%;max-width:1180px;background:var(--panel);border-radius:14px;box-shadow:0 16px 48px rgba(20,40,60,0.08);padding:18px;overflow:hidden}
+
+ header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+ header h1{margin:0;font-size:20px;display:flex;gap:10px;align-items:center}
+
+ .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+ select,input[type=range],button{padding:8px;border-radius:10px;border:1px solid #e6eef0;background:#fff;font-size:14px}
+
+ button.primary{background:var(--accent);color:#fff;border:none;padding:8px 12px;cursor:pointer}
+
+ .layout{display:flex;gap:18px;margin-top:16px}
+
+ .left{flex:1;display:flex;flex-direction:column;gap:12px}
+
+ .right{width:320px;min-width:260px}
+
+ .panel{background:linear-gradient(180deg,#fff,#fbfffb);padding:12px;border-radius:12px;box-shadow:0 8px 30px rgba(10,30,50,0.04)}
+
+ .row{display:flex;gap:12px;align-items:center}
+
+ .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+ .badge{background:#f4f9f6;padding:6px 8px;border-radius:8px;font-weight:700;box-shadow:inset 0 -1px rgba(0,0,0,0.02)}
+
+ .grid-wrap{display:flex;justify-content:center;padding:8px}
+
+ .grid{display:grid;gap:10px;justify-content:center;align-items:center}
+
+ .card{
+
+  width:var(--card-size);height:var(--card-size);border-radius:12px;background:linear-gradient(180deg,#fff,#f3f7f3);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;user-select:none;
+
+  box-shadow:0 8px 20px rgba(10,30,50,0.06);position:relative;transform-style:preserve-3d;transition:transform .28s,opacity .2s;
+
+ }
+
+ .card.flipped{transform:rotateY(180deg);cursor:default}
+
+ .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:12px;backface-visibility:hidden;font-size:34px;padding:6px}
+
+ .back{background:linear-gradient(180deg,#fff,#f3f7f3);color:#0b3a2f}
+
+ .front{transform:rotateY(180deg);font-size:34px}
+
+ .card.locked{opacity:.5;pointer-events:none}
+
+ .small{font-size:13px;color:#4b6166}
+
+ .controls-bottom{display:flex;gap:8px;align-items:center;margin-top:8px}
+
+ .progress{height:10px;background:#eee;border-radius:999px;overflow:hidden;flex:1}
+
+ .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%}
+
+ .leader{margin-top:12px}
+
+ .leader ol{margin:0;padding-left:16px}
+
+ @media (max-width:980px){ .layout{flex-direction:column} .right{width:100%} }
+
+ @media (max-width:480px){ :root{--card-size:70px} header{flex-direction:column;align-items:flex-start} }
+
+ .muted{color:#6b7b83}
+
+ .center{text-align:center}
+
+ .hintBadge{background:#fff6d8;border-radius:8px;padding:6px;font-weight:700}
+
+ .btn-inline{background:#fff;border:1px solid #e6eef0;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+ .hidden{display:none}
+
+</style>
+
+</head>
+
+<body>
+
+ <div class="app" role="application" aria-label="Memory parejas">
+
+  <header>
+
+   <h1>🧠 Memory — Parejas <small class="muted"></small></h1>
+
+   <div class="controls">
+
+    <label class="small">Sección
+
+     <select id="sectionSelect" aria-label="Seleccionar sección">
+
+      <option value="piratas">Piratas</option>
+
+      <option value="colores">Colores</option>
+
+      <option value="frutas">Frutas</option>
+
+      <option value="simbolos">Símbolos</option>
+
+      <option value="caras">Caras</option>
+
+      <option value="profesiones">Profesiones</option>
+
+      <option value="corazones">Corazones</option>
+
+      <option value="animales">Animales</option>
+
+      <option value="objetos">Objetos</option>
+
+     </select>
+
+    </label>
+
+
+
+    <label class="small">Dificultad
+
+     <select id="difficultySelect" aria-label="Seleccionar dificultad">
+
+      <option value="easy">Fácil</option>
+
+      <option value="medium" selected>Intermedio</option>
+
+      <option value="hard">Difícil</option>
+
+      <option value="expert">Experto</option>
+
+     </select>
+
+    </label>
+
+
+
+    <label class="small">Nivel
+
+     <input id="levelRange" type="range" min="1" max="50" value="1" aria-label="Nivel">
+
+    </label>
+
+
+
+    <button id="startBtn" class="primary">Iniciar / Reiniciar</button>
+
+   </div>
+
+  </header>
+
+
+
+  <div class="layout">
+
+   <div class="left">
+
+    <div class="panel">
+
+     <div class="row" style="justify-content:space-between">
+
+      <div class="meta">
+
+       <div class="badge" id="levelBadge">Nivel: 1</div>
+
+       <div class="badge" id="pairsBadge">Parejas: 4</div>
+
+       <div class="badge" id="movesBadge">Mov: 0</div>
+
+       <div class="badge" id="timeBadge">Tiempo: 00:00</div>
+
+      </div>
+
+      <div class="meta">
+
+       <div class="badge" id="starsBadge">⭐️⭐️⭐️</div>
+
+       <div class="hintBadge" id="hintBadge">Pistas: 3</div>
+
+      </div>
+
+     </div>
+
+
+
+     <div class="grid-wrap">
+
+      <div id="board" class="grid" role="grid" aria-live="polite" tabindex="0"></div>
+
+     </div>
+
+
+
+     <div class="controls-bottom">
+
+      <div class="progress"><i id="progBar"></i></div>
+
+      <div>
+
+       <button id="hintBtn" class="btn-inline">Pista</button>
+
+       <button id="nextLevelBtn" class="btn-inline hidden">Siguiente nivel →</button>
+
+      </div>
+
+     </div>
+
+    </div>
+
+
+
+    <div class="panel" style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;align-items:center">
+
+     <div class="info small">Consejos: Memoriza zonas, usa pistas si te trabas.</div>
+
+     <div style="margin-left:auto" class="small muted"></div>
+
+    </div>
+
+   </div>
+
+
+
+   <aside class="right">
+
+    <div class="panel">
+
+     <h4 class="small">Configuración</h4>
+
+     <div class="row" style="justify-content:space-between"><div class="small">Sección</div><div id="currentSection" class="small">Piratas</div></div>
+
+     <div class="row" style="justify-content:space-between"><div class="small">Dificultad</div><div id="currentDiff" class="small">Intermedio</div></div>
+
+     <hr/>
+
+     <div class="row" style="justify-content:space-between"><div class="small">Preview</div><div id="previewInfo" class="small">—</div></div>
+
+     <div style="margin-top:8px"><button id="saveScoreBtn">Guardar puntaje</button></div>
+
+     <div class="leader">
+
+      <h4 class="small">Mejores puntajes</h4>
+
+      <ol id="leaderboard" class="small"></ol>
+
+     </div>
+
+    </div>
+
+
+
+    <div class="panel" style="margin-top:12px">
+
+     <h4 class="small">Atajos</h4>
+
+     <ul class="small muted">
+
+      <li>Flechas para mover foco</li>
+
+      <li>Espacio o Enter para voltear carta enfocada</li>
+
+      <li>Pista revela una pareja por 1.5s</li>
+
+     </ul>
+
+    </div>
+
+   </aside>
+
+  </div>
+
+ </div>
+
+
+
+<script>
+
+/* ---------------- ICON POOLS: muchos emojis + SVG inline ---------------- */
+
+
+
+const ICONS = {
+
+ piratas: [
+
+  '🏴‍☠️','⚓️','🦜','🏝️','🗺️','🧭','🪙','🕯️','🦈','🗡️','🪝','🛶','🏺','🧿','🏴',
+
+  `<svg viewBox="0 0 64 64" width="48" height="48"><rect x="6" y="22" width="52" height="28" rx="5" fill="#f5d07a"/><circle cx="44" cy="36" r="3" fill="#7a4b1a"/></svg>`,
+
+  `<svg viewBox="0 0 64 64"><path d="M12 44 C20 28 44 28 52 44 Z" fill="#8ecae6"/></svg>`
+
+ ],
+
+
+
+ colores: [
+
+  '🔴','🟠','🟡','🟢','🔵','🟣','⚪️','⚫️','🟤','🟩','🟥','🟦','🟨','🟪',
+
+  `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ff6b6b"/></svg>`,
+
+  `<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="#ffd166"/></svg>`
+
+ ],
+
+
+
+ frutas: [
+
+  '🍎','🍌','🍊','🍇','🍓','🍍','🥝','🍑','🍒','🥭','🍉','🍐','🍋','🍈',
+
+  `<svg viewBox="0 0 64 64"><ellipse cx="32" cy="36" rx="16" ry="12" fill="#ffd166"/></svg>`
+
+ ],
+
+
+
+ simbolos: [
+
+  '⭐️','❤️','☀️','☁️','☂️','☯️','⚡️','✨','♟️','☃️','☘️','🔔','🔒','🎵',
+
+  `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="#8ecae6"/></svg>`
+
+ ],
+
+
+
+ caras: ['😀','😁','😂','😊','😉','😍','😎','🤓','🤠','🥳','😴','🤯','😇','🤖','🥺','😤'],
+
+ profesiones: ['👩‍⚕️','👨‍🍳','👩‍🏫','👨‍🔧','👩‍🚒','👩‍🎨','👨‍⚖️','👩‍💻','👩‍🌾','👨‍✈️','🕵️','👩‍🔬'],
+
+ corazones: ['❤️','🧡','💛','💚','💙','💜','🤎','🖤','💖','💗','💝','💘'],
+
+ animales: ['🐶','🐱','🐭','🐰','🐼','🦁','🐯','🐻','🐨','🐮','🐷','🐵','🦊','🐸'],
+
+ objetos: ['📚','📌','🔑','🕰️','📷','💡','📦','🎁','🔮','📞','💎','🎒','🛒','🔋']
+
+};
+
+
+
+
+
+/* ---------------- GAME STATE ---------------- */
+
+
+
+const state = {
+
+ section: 'piratas',
+
+ difficulty: 'medium',
+
+ level: 1,
+
+ pairs: 4,
+
+ cards: [],
+
+ first: null, second: null, lock:false,
+
+ moves:0, matched:0,
+
+ timer:null, elapsed:0, timeLimit:0, remaining:0,
+
+ hintsLeft:3, previewing:false,
+
+};
+
+
+
+
+
+/* DOM refs */
+
+const boardEl = document.getElementById('board');
+
+const sectionSelect = document.getElementById('sectionSelect');
+
+const difficultySelect = document.getElementById('difficultySelect');
+
+const levelRange = document.getElementById('levelRange');
+
+const startBtn = document.getElementById('startBtn');
+
+const hintBtn = document.getElementById('hintBtn');
+
+const nextLevelBtn = document.getElementById('nextLevelBtn');
+
+const levelBadge = document.getElementById('levelBadge');
+
+const pairsBadge = document.getElementById('pairsBadge');
+
+const movesBadge = document.getElementById('movesBadge');
+
+const timeBadge = document.getElementById('timeBadge');
+
+const starsBadge = document.getElementById('starsBadge');
+
+const progBar = document.getElementById('progBar');
+
+const hintBadge = document.getElementById('hintBadge');
+
+const currentSection = document.getElementById('currentSection');
+
+const currentDiff = document.getElementById('currentDiff');
+
+const previewInfo = document.getElementById('previewInfo');
+
+const leaderboardEl = document.getElementById('leaderboard');
+
+const saveScoreBtn = document.getElementById('saveScoreBtn');
+
+
+
+
+
+/* difficulty config */
+
+const DIFF = {
+
+ easy: {preview:60, timePerPair:28, hints:6, penalty:2},
+
+ medium: {preview:8, timePerPair:18, hints:4, penalty:4},
+
+ hard: {preview:5, timePerPair:12, hints:2, penalty:6},
+
+ expert: {preview:4, timePerPair:9, hints:1, penalty:8}
+
+};
+
+
+
+
+
+/* ---------- Utilities ---------- */
+
+
+
+function shuffle(a){
+
+ for(let i=a.length-1;i>0;i--){
+
+  const j = Math.floor(Math.random()*(i+1));
+
+  [a[i],a[j]] = [a[j],a[i]];
+
+ }
+
+ return a;
+
+}
+
+
+
+function formatTime(s){
+
+ const mm = String(Math.floor(s/60)).padStart(2,'0');
+
+ const ss = String(s%60).padStart(2,'0');
+
+ return `${mm}:${ss}`;
+
+}
+
+
+
+function storageKey(){
+
+ return `memory_mixed_${state.section}_${state.difficulty}`;
+
+}
+
+
+
+function computePairs(level, difficulty){
+
+ const L = Math.max(1, Math.min(50, level));
+
+ const curves = {
+
+  easy: {min:4, max:8},
+
+  medium: {min:6, max:12},
+
+  hard: {min:10, max:16},
+
+  expert: {min:14, max:25}
+
+ };
+
+ const c = curves[difficulty] || curves.medium;
+
+ const pct = (L - 1)/(50 - 1);
+
+ const pairs = Math.round(c.min + (c.max - c.min)*pct);
+
+ return Math.max(c.min, Math.min(c.max, pairs));
+
+}
+
+
+
+function computeGrid(cardsCount){
+
+ if(cardsCount <= 8) return {rows:2, cols: Math.ceil(cardsCount/2)};
+
+ if(cardsCount <= 12) return {rows:3, cols: Math.ceil(cardsCount/3)};
+
+ if(cardsCount <= 20) return {rows:4, cols: Math.ceil(cardsCount/4)};
+
+ if(cardsCount <= 30) return {rows:5, cols: Math.ceil(cardsCount/5)};
+
+ if(cardsCount <= 42) return {rows:6, cols: Math.ceil(cardsCount/6)};
+
+ return {rows:7, cols: Math.ceil(cardsCount/7)};
+
+}
+
+
+
+function buildDeck(section, pairs){
+
+ let pool = ICONS[section] ? [...ICONS[section]] : [...ICONS.piratas];
+
+
+
+ while(pool.length < pairs){
+
+  pool = pool.concat(ICONS[section]);
+
+ }
+
+
+
+ shuffle(pool);
+
+ const chosen = pool.slice(0, pairs);
+
+
+
+ const deck = [];
+
+ let id = 1;
+
+
+
+ chosen.forEach(face => {
+
+  deck.push({id:id++, face: face, flipped:false, matched:false});
+
+  deck.push({id:id++, face: face, flipped:false, matched:false});
+
+ });
+
+
+
+ shuffle(deck);
+
+ return deck;
+
+}
+
+
+
+function renderBoard(){
+
+ boardEl.innerHTML = '';
+
+
+
+ const total = state.cards.length;
+
+ const dims = computeGrid(total);
+
+
+
+ const cardSize = getComputedStyle(document.documentElement)
+
+           .getPropertyValue('--card-size').trim();
+
+
+
+ boardEl.style.gridTemplateColumns = `repeat(${dims.cols}, ${cardSize})`;
+
+
+
+ state.cards.forEach((card, idx) => {
+
+  const el = document.createElement('div');
+
+  el.className = 'card' + (card.flipped ? ' flipped' : '') + (card.matched ? ' locked' : '');
+
+  el.tabIndex = 0;
+
+  el.dataset.index = idx;
+
+  el.setAttribute('role','button');
+
+
+
+  const faceHtml = card.face;
+
+
+
+  el.innerHTML = `
+
+   <div class="face back">${card.flipped || card.matched ? faceHtml : '👻'}</div>
+
+   <div class="face front">${faceHtml}</div>
+
+  `;
+
+
+
+  el.addEventListener('click', ()=> onCardClick(idx));
+
+  el.addEventListener('keydown', (e)=>{
+
+   if(e.code === 'Space' || e.code === 'Enter'){
+
+    e.preventDefault();
+
+    el.click();
+
+   }
+
+  });
+
+
+
+  boardEl.appendChild(el);
+
+ });
+
+}
+
+
+
+
+
+/* ------------------- GAME FLOW ------------------- */
+
+
+
+function startGame(){
+
+ state.section = sectionSelect.value;
+
+ state.difficulty = difficultySelect.value;
+
+ state.level = parseInt(levelRange.value,10) || 1;
+
+ state.pairs = computePairs(state.level, state.difficulty);
+
+
+
+ state.cards = buildDeck(state.section, state.pairs);
+
+
+
+ state.first = null;
+
+ state.second = null;
+
+ state.lock = false;
+
+
+
+ state.moves = 0;
+
+ state.matched = 0;
+
+
+
+ state.elapsed = 0;
+
+ state.timeLimit = Math.max(10, DIFF[state.difficulty].timePerPair * state.pairs);
+
+ state.remaining = state.timeLimit;
+
+
+
+ state.hintsLeft = DIFF[state.difficulty].hints;
+
+ state.previewing = true;
+
+
+
+ updateHeader();
+
+ renderBoard();
+
+ revealAll();
+
+
+
+ const previewSeconds = DIFF[state.difficulty].preview;
+
+ previewInfo.textContent = `${previewSeconds} s`;
+
+
+
+ setTimeout(()=>{
+
+  hideAll();
+
+  state.previewing = false;
+
+  renderBoard();
+
+  startTimer();
+
+ }, previewSeconds * 1000);
+
+}
+
+
+
+function revealAll(){
+
+ state.cards.forEach(c=> c.flipped = true);
+
+ renderBoard();
+
+}
+
+
+
+function hideAll(){
+
+ state.cards.forEach(c=> c.flipped = false);
+
+ renderBoard();
+
+}
+
+
+
+function onCardClick(index){
+
+ if(state.lock || state.previewing) return;
+
+
+
+ const card = state.cards[index];
+
+ if(!card || card.flipped || card.matched) return;
+
+
+
+ card.flipped = true;
+
+ renderBoard();
+
+
+
+ if(!state.first){
+
+  state.first = {index, card};
+
+  return;
+
+ }
+
+
+
+ if(!state.second && state.first.index !== index){
+
+  state.second = {index, card};
+
+  state.moves++;
+
+  movesBadge.textContent = 'Mov: ' + state.moves;
+
+  state.lock = true;
+
+
+
+  setTimeout(()=> evaluateMatch(), 600);
+
+ }
+
+}
+
+
+
+function evaluateMatch(){
+
+ const a = state.cards[state.first.index];
+
+ const b = state.cards[state.second.index];
+
+
+
+ if(a.face === b.face){
+
+  a.matched = true;
+
+  b.matched = true;
+
+
+
+  playBeep(880);
+
+
+
+  state.matched++;
+
+  state.first = null;
+
+  state.second = null;
+
+  state.lock = false;
+
+
+
+  renderBoard();
+
+
+
+  if(state.matched >= state.pairs){
+
+   completeLevel();
+
+  } else {
+
+   updateHeader();
+
+  }
+
+ } else {
+
+  playBeep(220);
+
+  setTimeout(()=>{
+
+   a.flipped = false;
+
+   b.flipped = false;
+
+
+
+   state.first = null;
+
+   state.second = null;
+
+   state.lock = false;
+
+
+
+   state.remaining = Math.max(0, state.remaining - DIFF[state.difficulty].penalty);
+
+
+
+   renderBoard();
+
+   updateHeader();
+
+  }, 450);
+
+ }
+
+}
+
+
+
+/* TIMER */
+
+let gameTimer = null;
+
+
+
+function startTimer(){
+
+ stopTimer();
+
+ gameTimer = setInterval(()=>{
+
+  state.elapsed++;
+
+  state.remaining = Math.max(0, state.timeLimit - state.elapsed);
+
+  updateHeader();
+
+
+
+  if(state.remaining <= 0){
+
+   stopTimer();
+
+   loseGame();
+
+  }
+
+ }, 1000);
+
+}
+
+
+
+function stopTimer(){
+
+ if(gameTimer){
+
+  clearInterval(gameTimer);
+
+  gameTimer = null;
+
+ }
+
+}
+
+
+
+
+
+function completeLevel(){
+
+ stopTimer();
+
+ setToast(`¡Nivel completado! Mov: ${state.moves} — ⭐ ${computeStars()}`, 1800);
+
+
+
+ nextLevelBtn.classList.remove('hidden');
+
+ renderBoard();
+
+}
+
+
+
+nextLevelBtn.addEventListener('click', ()=>{
+
+ nextLevelBtn.classList.add('hidden');
+
+ levelRange.value = Math.min(50, parseInt(levelRange.value,10)+1);
+
+ startGame();
+
+});
+
+
+
+function loseGame(){
+
+ setToast('Se acabó el tiempo. Nivel fallado.', 2200);
+
+ revealAll();
+
+ nextLevelBtn.classList.remove('hidden');
+
+}
+
+
+
+
+
+/* ------------------ HINT ------------------ */
+
+
+
+function showHint(){
+
+ if(state.hintsLeft <= 0 || state.previewing){
+
+  setToast('Sin pistas');
+
+  return;
+
+ }
+
+
+
+ state.hintsLeft--;
+
+ hintBadge.textContent = 'Pistas: ' + state.hintsLeft;
+
+
+
+ const unmatched = state.cards
+
+  .map((c,i)=>({c,i}))
+
+  .filter(x=>!x.c.matched && !x.c.flipped);
+
+
+
+ if(unmatched.length < 2) return;
+
+
+
+ const map = {};
+
+
+
+ for(const item of unmatched){
+
+  map[item.c.face] = map[item.c.face] || [];
+
+  map[item.c.face].push(item.i);
+
+ }
+
+
+
+ let pair = null;
+
+
+
+ for(const k in map){
+
+  if(map[k].length >= 2){
+
+   pair = map[k].slice(0,2);
+
+   break;
+
+  }
+
+ }
+
+
+
+ if(!pair){
+
+  pair = [unmatched[0].i, unmatched[1].i];
+
+ }
+
+
+
+ state.lock = true;
+
+ state.cards[pair[0]].flipped = true;
+
+ state.cards[pair[1]].flipped = true;
+
+ renderBoard();
+
+
+
+ setTimeout(()=>{
+
+  state.cards[pair[0]].flipped = false;
+
+  state.cards[pair[1]].flipped = false;
+
+  state.lock = false;
+
+  renderBoard();
+
+ }, 1400);
+
+}
+
+
+
+
+
+/* ---------------- SCORES ---------------- */
+
+
+
+function scoreKey(){
+
+ return `memory_mixed_scores_${state.section}_${state.difficulty}`;
+
+}
+
+
+
+function loadScores(){
+
+ try{
+
+  const s = localStorage.getItem(scoreKey());
+
+  return s ? JSON.parse(s) : [];
+
+ }catch(e){
+
+  return [];
+
+ }
+
+}
+
+
+
+function saveScoreLocal(obj){
+
+ const arr = loadScores();
+
+ arr.push(obj);
+
+ arr.sort((a,b)=> (b.stars - a.stars) || (a.time - b.time) || (a.moves - b.moves));
+
+ localStorage.setItem(scoreKey(), JSON.stringify(arr.slice(0,10)));
+
+}
+
+
+
+function renderLeaderboard(){
+
+ const arr = loadScores();
+
+ leaderboardEl.innerHTML = '';
+
+
+
+ if(arr.length === 0){
+
+  leaderboardEl.innerHTML = '<li class="muted">Sin puntuaciones</li>';
+
+  return;
+
+ }
+
+
+
+ arr.forEach(item=>{
+
+  const li = document.createElement('li');
+
+  li.textContent = `Nivel ${item.level} — ⭐${item.stars} — ${formatTime(item.time)} — ${item.moves} mov`;
+
+  leaderboardEl.appendChild(li);
+
+ });
+
+}
+
+
+
+
+
+/* ---------------- AUDIO ---------------- */
+
+
+
+let audioCtx = null;
+
+
+
+function ensureAudio(){
+
+ if(!audioCtx)
+
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+}
+
+
+
+function playBeep(freq=600, time=0.08){
+
+ try{
+
+  ensureAudio();
+
+  const o = audioCtx.createOscillator();
+
+  const g = audioCtx.createGain();
+
+
+
+  g.gain.value = 0.25;
+
+  o.type='sine';
+
+  o.frequency.value=freq;
+
+
+
+  o.connect(g);
+
+  g.connect(audioCtx.destination);
+
+
+
+  o.start();
+
+  o.stop(audioCtx.currentTime + time);
+
+ }catch(e){}
+
+}
+
+
+
+
+
+/* -------- TOAST -------- */
+
+
+
+function setToast(txt, ms=1200){
+
+ let el = document.getElementById('__mem_toast');
+
+ if(!el){
+
+  el = document.createElement('div');
+
+  el.id='__mem_toast';
+
+  el.style.cssText=
+
+   'position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:rgba(0,0,0,0.75);color:white;padding:10px 14px;border-radius:999px;z-index:9999';
+
+  document.body.appendChild(el);
+
+ }
+
+ el.textContent = txt;
+
+ el.style.display = 'block';
+
+
+
+ clearTimeout(el._t);
+
+ el._t = setTimeout(()=> el.style.display = 'none', ms);
+
+}
+
+
+
+function capitalize(s){
+
+ return s.charAt(0).toUpperCase() + s.slice(1);
+
+}
+
+
+
+function computeStars(){
+
+ const timeRatio = state.remaining / state.timeLimit;
+
+ const idealMoves = Math.max(2, Math.round(state.pairs * 1.4));
+
+ const moveRatio = idealMoves / Math.max(1, state.moves);
+
+
+
+ let score = 1;
+
+ if(timeRatio > 0.5 && moveRatio > 0.8) score = 2;
+
+ if(timeRatio > 0.6 && moveRatio > 1) score = 3;
+
+
+
+ return Math.max(0, Math.min(3, Math.round(score)));
+
+}
+
+
+
+
+
+/* -------- HEADER -------- */
+
+
+
+function updateHeader(){
+
+ levelBadge.textContent = 'Nivel: ' + state.level;
+
+ pairsBadge.textContent = 'Parejas: ' + state.pairs;
+
+ movesBadge.textContent = 'Mov: ' + state.moves;
+
+
+
+ currentSection.textContent = capitalize(state.section);
+
+ currentDiff.textContent = capitalize(state.difficulty);
+
+
+
+ hintBadge.textContent = 'Pistas: ' + state.hintsLeft;
+
+
+
+ previewInfo.textContent = DIFF[state.difficulty].preview + ' s';
+
+
+
+ timeBadge.textContent =
+
+  'Tiempo: ' + formatTime(state.elapsed) + ' / ' + formatTime(state.timeLimit);
+
+
+
+ progBar.style.width = state.timeLimit
+
+  ? Math.round(((state.timeLimit - state.remaining)/state.timeLimit)*100) + '%'
+
+  : '0%';
+
+
+
+ starsBadge.textContent =
+
+  '⭐'.repeat(computeStars()) + '☆'.repeat(3 - computeStars());
+
+}
+
+
+
+
+
+/* -------- EVENTS -------- */
+
+
+
+startBtn.addEventListener('click', ()=>{
+
+ nextLevelBtn.classList.add('hidden');
+
+ startGame();
+
+ renderLeaderboard();
+
+});
+
+
+
+hintBtn.addEventListener('click', ()=> showHint());
+
+
+
+saveScoreBtn.addEventListener('click', ()=>{
+
+ if(state.matched >= state.pairs){
+
+  saveScoreLocal({
+
+   level: state.level,
+
+   moves: state.moves,
+
+   time: state.elapsed,
+
+   stars: computeStars(),
+
+   date: Date.now()
+
+  });
+
+  renderLeaderboard();
+
+  setToast('Puntaje guardado');
+
+ } else {
+
+  setToast('Termina el nivel para guardar');
+
+ }
+
+});
+
+
+
+levelRange.addEventListener('input', (e)=>{
+
+ levelBadge.textContent = 'Nivel: ' + e.target.value;
+
+});
+
+
+
+sectionSelect.addEventListener('change', (e)=>{
+
+ state.section = e.target.value;
+
+ currentSection.textContent = capitalize(state.section);
+
+ renderLeaderboard();
+
+});
+
+
+
+difficultySelect.addEventListener('change', (e)=>{
+
+ state.difficulty = e.target.value;
+
+ currentDiff.textContent = capitalize(state.difficulty);
+
+ renderLeaderboard();
+
+});
+
+
+
+
+
+/* -------- KEYBOARD NAVIGATION -------- */
+
+
+
+let focusIndex = 0;
+
+
+
+boardEl.addEventListener('keydown', (e)=>{
+
+ const total = state.cards.length;
+
+ if(total === 0) return;
+
+
+
+ const dims = computeGrid(total);
+
+ const cols = dims.cols;
+
+
+
+ if(e.key === 'ArrowRight'){
+
+  focusIndex = (focusIndex + 1) % total;
+
+  focusCard(focusIndex);
+
+  e.preventDefault();
+
+ }
+
+
+
+ if(e.key === 'ArrowLeft'){
+
+  focusIndex = (focusIndex - 1 + total) % total;
+
+  focusCard(focusIndex);
+
+  e.preventDefault();
+
+ }
+
+
+
+ if(e.key === 'ArrowDown'){
+
+  focusIndex = (focusIndex + cols) % total;
+
+  focusCard(focusIndex);
+
+  e.preventDefault();
+
+ }
+
+
+
+ if(e.key === 'ArrowUp'){
+
+  focusIndex = (focusIndex - cols + total) % total;
+
+  focusCard(focusIndex);
+
+  e.preventDefault();
+
+ }
+
+
+
+ if(e.code === 'Space' || e.code === 'Enter'){
+
+  const el = boardEl.querySelector(`.card[data-index="${focusIndex}"]`);
+
+  if(el){
+
+   el.click();
+
+  }
+
+  e.preventDefault();
+
+ }
+
+});
+
+
+
+function focusCard(i){
+
+ const el = boardEl.querySelectorAll('.card')[i];
+
+ if(!el) return;
+
+
+
+ el.focus();
+
+ el.style.outline = '3px solid rgba(42,157,115,0.12)';
+
+ setTimeout(()=> el.style.outline = '', 350);
+
+}
+
+
+
+
+
+/* ---------- INIT ---------- */
+
+
+
+(function init(){
+
+ state.section = sectionSelect.value;
+
+ state.difficulty = difficultySelect.value;
+
+ state.level = parseInt(levelRange.value,10) || 1;
+
+
+
+ updateHeader();
+
+ renderLeaderboard();
+
+ startGame();
+
+})();
+
+
+</script>
+
+</body>
+
+</html>
