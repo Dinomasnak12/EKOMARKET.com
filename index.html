@@ -1,22 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+    <link rel="stylesheet" href="estilo.css">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Z-UA-Compatible" content="IE-edge">
-  <meta name="viewport" content="width=device-width, inicial-scale=1.0">
-  <title>flexbox en CSS</title>
-  <link rel="stylesheet" href="estilos/estilos.css"/>
-  </head>
-  <body>
-    <h1> flexbox en CSS</h1>
-    <div class="contenedor">
-    <p style="flex-basis: 200px;">texto 1</p>
-    <p style="align-self: center">texto 2</p>
-    <p>texto 3</p>
-    <p>texto 4</p>
-    <p>texto 5</p>
-    <p>texto 6</p>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRUTAS FRESCAS</title>
+    <img src="logo.png" alt="FRUTAS FRESCAS" width="150">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #ff9800;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 20px;
+        }
+        .frutas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+        .fruta {
+            background: rgb(255, 238, 0);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 250px;
+            padding: 15px;
+            text-align: center;
+        }
+        .fruta img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        footer {
+            background: #ffbb00;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Frutas Deliciosas</h1>
+    <p>Descubre información sobre frutas frescas y saludables</p>
+</header>
+
+<section class="frutas">
+
+    <div class="fruta">
+        <img src="https://i.pinimg.com/736x/63/64/fb/6364fbeede3157aac881ed9c088d9c26--fruit-art-visual-merchandising.jpg" alt="Manzana">
+        <h2>Manzana</h2>
+        <p>Dulce, jugosa y llena de fibra. Ideal para un snack saludable.</p>
+        <button class="btn-precio">$1.00</button>
     </div>
-  </body>
+
+    <div class="fruta">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.kzzVVMctjJomU9cwfoJxWAHaFj?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Banana">
+        <h2>Banana</h2>
+        <p>Rica en potasio y perfecta para darte energía durante el día.</p>
+        <button class="btn-precio">$0.80</button>
+    </div>
+
+    <div class="fruta">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.voD9yKdn0uLiTaUrhcvz0AHaEo?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Fresa">
+        <h2>Fresa</h2>
+        <p>Fresca, dulce y llena de antioxidantes. Excelente para postres.</p>
+        <button class="btn-precio">$2.50</button>
+    </div>
+
+    <div class="fruta">
+        <img src="https://tse3.mm.bing.net/th/id/OIP.C7BncfLsGR9f1BrhhLmzKgHaFI?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Naranja">
+        <h2>Naranja</h2>
+        <p>Una gran fuente de vitamina C, perfecta para fortalecer tu sistema inmune.</p>
+        <button class="btn-precio">$1.20</button>
+    </div>
+
+</section>
+
+<footer>
+    <p style="color: rgb(0, 0, 0);">© 2025 FRUTAS DELICIOSAS.</p> 
+</footer>
+<a href="pagina 2.html"> pagina 2</a>
+</body>
 </html>
-<a href="pagina 1.html"> pagina 1</a>
+<body background="https://cdn.pixabay.com/photo/2023/09/16/18/18/wallpaper-8257343_1280.png"></body>
