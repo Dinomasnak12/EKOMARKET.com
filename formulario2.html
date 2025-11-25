@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Registro</title>
+</head>
+<body>
+
+    <h2>Formulario de Registro</h2>
+
+    <form action="procesar.php" method="post">
+        
+        <!-- Campo de nombre -->
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        <!-- Campo de apellido -->
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+        <!-- Campo de edad -->
+        <label for="edad">Edad:</label><br>
+        <input type="password" id="edad" name="edad" required><br><br>
+        <!-- Campo de Numero DNI -->
+        <label for="Numero DNI">Dni:</label><br>
+        <input type="text" id="Numero DNI" name="Numero DNI" required><br><br>
+         <!-- Selección de Estudios superiores -->
+        <label for="Estudios Superiores">Estudios Superiores:</label><br>
+        <select id="Estudios Superiores" name="Estudios Superiores">
+            <option value="Instituto">Instituto</option>
+            <option value="Universidad">Universidad</option>
+            <option value="otro">Otro</option>
+        <!-- Campo de Ciudad -->
+        <label for="Ciudad">Ciudad:</label><br>
+        <input type="text" id="Ciudad" name="Ciudad" required><br><br>
+        <!-- Campo de telefono -->
+        <label for="teléfono">Teléfono:</label><br>
+        <input type="text" id="teléfono" name="teléfono" required><br><br>
+       <!-- Selección de operador -->
+        <label for="operador">Operador:</label><br>
+        <select id="operador" name="operador">
+            <option value="claro">Claro</option>
+            <option value="movistar">Movistar</option>
+            <option value="otro">Otro</option>
+        </select><br><br>
+         <!-- Selección de Musica favorita   -->
+        <label for="Musica favorita">Musica favorita:</label><br>
+        <select id="Musica favorita:" name="Musica favorita:">
+            <option value="jaz">jaz</option>
+            <option value="regueton">regueton</option>
+            <option value="salsa">salsa</option>
+        </select><br><br>
+        <!-- Campo de correo -->
+        <label for="email">Correo electrónico:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <!-- Campo de contraseña -->
+        <label for="password">Contraseña:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <!-- Selección de género -->
+        <label for="genero">Género:</label><br>
+        <select id="genero" name="genero">
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+        </select><br><br>
+
+        <!-- Casilla de verificación -->
+        <input type="checkbox" id="terminos" name="terminos" required>
+        <label for="terminos">Acepto los términos y condiciones</label><br><br>
+
+        <!-- Botón de envío -->
+        <input type="submit" value="Registrarse">
+        <!-- Botón de enviar sin validar -->
+        <input type="submit" value="Inviar sin validar">
+        
+
+    </form>
+
+</body>
+</html>
+<style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      background-image: url('https://www.tuexperto.com/wp-content/uploads/2020/01/como-reenviar-varios-correos-electronicos-de-gmail-a-la-vez-con-chrome-1080x708.jpg.webp'); /* Ejemplo: imagen aleatoria desde internet */
+      background-size: cover;        /* Ajusta para cubrir toda la pantalla */
+      background-position: center;   /* Centra la imagen */
+      background-repeat: no-repeat;  /* Evita que se repita */
+      background-attachment: fixed;  /* Efecto tipo “wallpaper” */
+    }
+  </style>

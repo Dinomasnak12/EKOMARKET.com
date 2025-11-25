@@ -1,0 +1,22 @@
+body{ 
+        background:  darkorange
+    }
+    font{ 
+        size: 8;
+        color:rgb(170, 255, 0);
+        text-align: left;
+        font-family:  sans-serif;
+        font-style: oblique;
+    }
+    h1{ 
+        color:aquamarine;
+        font-style:italic;
+    }
+    h6{ 
+        color: black;
+        font-family: ' trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, Helvetica, sans-serif
+    }
+    img{ 
+        width: 150px;
+        height: 150px;
+    }
